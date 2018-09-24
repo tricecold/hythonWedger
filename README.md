@@ -1,7 +1,8 @@
 # hythonWedger
-#Houdini Wedger 2.0
-#Author :   Timucin OZGER
-#Date   :   23.09.2018
+******Houdini Wedger 2.0
+Author :   Timucin OZGER
+Date   :   23.09.2018
+
 
 This little code wedges a houdini file using multiprocessing.pool . Works especially best with single threadd tasks runinng in parralel.
 
