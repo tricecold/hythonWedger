@@ -1,5 +1,5 @@
 # hythonWedger
-******Houdini Wedger 2.0
+Houdini Wedger 2.0
 Author :   Timucin OZGER
 Date   :   23.09.2018
 
