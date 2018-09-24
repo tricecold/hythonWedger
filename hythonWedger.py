@@ -1,4 +1,8 @@
-# Importing all needed modules
+#Houdini Wedger 2.0 
+#Author : Timucin OZGER 
+#Date : 23.09.2018
+
+#Importing all needed modules
 import multiprocessing
 from multiprocessing.pool import ThreadPool
 import time, timeit
