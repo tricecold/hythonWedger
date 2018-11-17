@@ -1,3 +1,6 @@
+![alt text](https://raw.githubusercontent.com/tricecold/hythonWedger/wedger2.jpg)
+
+
 # hythonWedger
 Houdini Wedger 2.0
 Author :   Timucin OZGER
