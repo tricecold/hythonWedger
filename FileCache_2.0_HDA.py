@@ -1,5 +1,3 @@
-#FileCache_2.0.hdalc
-
 def readValues(kwargs):
     import subprocess, os
     #####################################################
@@ -19,6 +17,10 @@ def readValues(kwargs):
     makeDaily = node.evalParm('Make_Daily')
     rop = node.path() + "/rop/cache"
     ropFrame = rop + "/f"
+    Flipbook = node.path() + "/rop/Flipbook"
+    FlipbookOutput = node.path() + "/rop/Flipbook/picture"
+    FlipbookFrame = node.path() + "/rop/Flipbook/f"
+    VideoOutput = node.evalParm('Videos')
     
     #####################################################
     
@@ -36,10 +38,14 @@ def readValues(kwargs):
     print "End Frame   : " + str(ef)
     print "Simulate    : " + str(isSim)
     print "ropNode     : " + rop
-
+    print "FlipBook    : " + str(Flipbook)
+    print "FlipBookOut : " + str(FlipbookOutput)
+    print "FlipBookFR  : " + str(FlipbookFrame)
+    print "Videos      : " + str(VideoOutput)
+    
     #####################################################
     
-    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame)
+    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame) + "\n" + str(FlipbookOutput) + "\n" + str(FlipbookFrame) + "\n" + str(Flipbook) + "\n" + str(VideoOutput)
     task = "hython /home/tricecold/pythonTest/multiProcess_BatchCache-NoSIM.py " + cmdFile
     print task
     
@@ -51,8 +57,4 @@ def readValues(kwargs):
     a.write(arguements)
     a.close
     
-    #####################################################
-    p = subprocess.Popen(task,shell=True) #launches subprocessdef readValues(kwargs):
-    #####################################################
-    
-    
+    p = subprocess.Popen(task,shell=True) #launches subprocess
