@@ -1,5 +1,5 @@
 
-(https://github.com/tricecold/hythonWedger/blob/master/wedger2.jpg)
+![alt text](https://github.com/tricecold/hythonWedger/blob/master/wedger2.jpg)
 
 
 # hythonWedger
