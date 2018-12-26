@@ -17,16 +17,28 @@ Some tests showed that around additional %30 optimized gains were made if POP si
 This HDA creates a txt file to be run with the main file.
 
 Under the HIP File Folder It creates 
-
+```
 HIPFILE
-    geo
-       WedgerSOPNAME
-                   v_0 (version of the cache)
-                      cmd (this is the command that main python file processes)
-                      videos
-                      wedge_n
-                            Flipbook
-
+------geo
+      ---WedgerSOPNAME
+         -------------v_0 (version of the cache)
+                      ---cmd (this is the command that main python file processes)
+                      ---videos
+                      ---wedge_n
+                         --------- _drafts
+|   +-- begin-with-the-crazy-ideas.textile
+|   +-- on-simplicity-in-technology.markdown
++-- _includes
+|   +-- footer.html
+|   +-- header.html
++-- _layouts
+|   +-- default.html
+|   +-- post.html
++-- _posts
+|   +-- 2007-10-29-why-every-programmer-should-play-nethack.textile
+|   +-- 2009-04-26-barcamp-boston-4-roundup.textile
++-- _dataFlipbook
+```
              
 USAGE
 Load the HDA in your scene
