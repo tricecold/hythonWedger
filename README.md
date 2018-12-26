@@ -24,92 +24,9 @@ HIPFILE
                    v_0 (version of the cache)
                       cmd (this is the command that main python file processes)
                       videos
-                      wedge_n#Multiprocess Functions Here    
+                      wedge_n
+                            Flipbook
 
-82
-
-if __name__ == '__main__':
-
-83
-
-    
-
-84
-
-    pool = multiprocessing.Pool(max_number_processes) #Defines the Batch Size
-
-85
-
-    
-
-86
-
-    if(isSim == 1):
-
-87
-
-        for wedge in range(0,total_tasks):
-
-88
-
-            pool.apply_async(simRops,args=(wedge,)) #Runs an Instance with each adjusted wedge Value
-
-89
-
-    
-
-90
-
-    if(isSim == 0):
-
-91
-
-        for wedge in range(0,total_tasks):
-
-92
-
-            pool.apply_async(cacheRops,args=(wedge,)) #Runs an Instance with each adjusted wedge Value
-
-93
-
-​
-
-94
-
-    if(makeDaily == 1):
-
-95
-
-        for wedge in range(0,total_tasks):
-
-96
-
-            pool.apply_async(dailyHoudini,args=(wedge,)) #Runs an Instance with each adjusted wedge Value
-
-97
-
-​
-
-98
-
-    
-
-99
-
-    pool.close() # After all threads started we close the pool
-
-100
-
-    pool.join() # And wait until all threads are done
-
-101
-
-    
-
-102
-
-print("Parent: this Process ran %s seconds" % str(timeit.default_timer() - start_time)) (Where The BGEOS are stored)
-                            Flipbook (Corresponding jpg files)
              
 USAGE
 Load the HDA in your scene
