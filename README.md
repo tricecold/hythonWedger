@@ -16,6 +16,20 @@ Some tests showed that around additional %30 optimized gains were made if POP si
 
 This HDA creates a txt file to be run with the main file.
 
+Under the HIP File Folder It creates 
+
+HIPFILE
+-----geo
+     ----WedgerSOPNAME
+         ----v_0 (version of the cache)
+             -cmd (this is the command that main python file processes)
+             -videos
+             -wedge_0 (Where The BGEOS are stored)
+              -Flipbook (Corresponding jpg files)
+             -wedge_1
+              -Flipbook
+             -wedge_n
+              -Flipbook
 USAGE
 Load the HDA in your scene
 Use it instead of a file Cache
