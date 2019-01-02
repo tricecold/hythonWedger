@@ -18,7 +18,7 @@ lines = open(cmdFile).read().split('\n')
 #Arguements Needed to run the script 
 #lines[0] /home/tricecold/Work/tempHoudini/Fire.hiplc        ***File To Run
 #lines[1] 10                                                 ***Batch Size
-#lines[2] 2                                                  ***Max SImultanious Task Limit
+#lines[2] 2                                                  ***Max Simultanious Task Limit
 #lines[3] 1                                                  ***Is it a Sim
 #lines[4] 0                                                  ***Make Daily (Not Implemented)
 #lines[5] /obj/pyro_import/FileCache_2.01/Wedge_Iterate      ***Changes Linked Value in Hython Session
@@ -54,8 +54,8 @@ def simRops(wedge=total_tasks):
 
 #Updates the wedge Value and runs the rop in splitted frame ranges 
 def cacheRops(wedge=total_tasks):
-    startFrame = taskList[wedge][0]
-    endFrame = taskList[wedge][-1]
+    startFrame = taskList[wedge][0] + int(lines[12])
+    endFrame = taskList[wedge][-1] + int(lines[12])
     hou.parmTuple(lines[7])[0].set(startFrame)
     hou.parmTuple(lines[7])[1].set(endFrame)
     time.sleep(0.1)
