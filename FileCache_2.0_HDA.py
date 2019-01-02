@@ -21,6 +21,7 @@ def readValues(kwargs):
     FlipbookOutput = node.path() + "/rop/Flipbook/picture"
     FlipbookFrame = node.path() + "/rop/Flipbook/f"
     VideoOutput = node.evalParm('Videos')
+    script = node.evalParm('scriptPath')
     
     #####################################################
     
@@ -42,11 +43,12 @@ def readValues(kwargs):
     print "FlipBookOut : " + str(FlipbookOutput)
     print "FlipBookFR  : " + str(FlipbookFrame)
     print "Videos      : " + str(VideoOutput)
+    print "Script      : " + script
     
     #####################################################
     
-    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame) + "\n" + str(FlipbookOutput) + "\n" + str(FlipbookFrame) + "\n" + str(Flipbook) + "\n" + str(VideoOutput)
-    task = "hython /home/tricecold/pythonTest/multiProcess_BatchCache-NoSIM.py " + cmdFile
+    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame) + "\n" + str(FlipbookOutput) + "\n" + str(FlipbookFrame) + "\n" + str(Flipbook) + "\n" + str(VideoOutput) + "\n" + str(sf) + "\n" + str(ef)
+    task = "hython " + script + " " + cmdFile
     print task
     
     #####################################################
