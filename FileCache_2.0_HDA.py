@@ -8,7 +8,7 @@ def readValues(kwargs):
     taskIterate = node.path() + "/Wedge_Iterate"
     filename = hou.hipFile.path()
     filepath = os.path.dirname(filename) + "/"
-    logPath = node.evalParm('Logs') + "/"
+    logPath = node.evalParm('Logs')  
     cmdFile = node.evalParm('Logs') + "cmd.txt"
     sf = int(node.evalParm('f1'))
     ef = int(node.evalParm('f2'))
@@ -47,7 +47,7 @@ def readValues(kwargs):
     
     #####################################################
     
-    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame) + "\n" + str(FlipbookOutput) + "\n" + str(FlipbookFrame) + "\n" + str(Flipbook) + "\n" + str(VideoOutput) + "\n" + str(sf) + "\n" + str(ef)
+    arguements = filename + "\n" + str(batchsize) + "\n" + str(taskLimit) + "\n" + str(isSim)  + "\n" + str(makeDaily) + "\n" + str(taskIterate) + "\n" + str(rop) + "\n" + str(ropFrame) + "\n" + str(FlipbookOutput) + "\n" + str(FlipbookFrame) + "\n" + str(Flipbook) + "\n" + str(VideoOutput) + "\n" + str(sf) + "\n" + str(ef)  + "\n" + logPath
     task = "hython " + script + " " + cmdFile
     print task
     
