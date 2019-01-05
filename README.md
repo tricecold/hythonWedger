@@ -34,12 +34,13 @@ Load the HDA in your scene
 Use it instead of a file Cache
 Play around batch size and max tasks to optimize performance based on your needs.
 
+![alt text](https://github.com/tricecold/hythonWedger/blob/master/ProgressReport.jpg)
+
 TO DO
 1) Add fail safes for memory usage , if possible fail pools that go over a limit of memory use and retry once more pools are complete.
 2) Autosave a copy of hip file to run instead of master file
-3) Design a UI or a html server that can follow up the running tasks with some kind of progress report
-4) Create some benchmarks.
-6) Create proper versioning tools that is linked to scene file or project
+3) Create some benchmarks.
+4) Create proper versioning tools that is linked to scene file or project
 
 
 
