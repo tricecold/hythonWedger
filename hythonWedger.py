@@ -1,3 +1,4 @@
+# coding: utf8
 #Houdini Wedger 2.0 
 #Author : Timucin OZGER 
 #Date : 23.09.2018
@@ -7,6 +8,9 @@ import multiprocessing
 from multiprocessing.pool import ThreadPool
 import time, timeit, os , subprocess, resource, threading, sys
 from multiprocessing import Process
+
+#Clear Screen
+os.system('clear') # on linux / os x
 
 # Starting timer for Parent measurement
 start_time = timeit.default_timer()
@@ -35,6 +39,66 @@ max_number_processes = int(lines[2]) # defines the batch size
 FileRange =  int(abs(hou.evalParmTuple(lines[7])[0] - hou.evalParmTuple(lines[7])[1]))
 isSim = int(lines[3]) # simulate or cache flag
 makeDaily = int(lines[4]) # make daily from a camera
+logPath = lines[14]
+progressFile = logPath + "progress.out"
+
+logs = os.listdir(logPath)
+for log in logs:
+    if log.endswith(".log"):
+        os.remove(os.path.join(logPath, log))
+
+if os.path.isfile(progressFile):
+    os.remove(progressFile)
+
+class Progress(object):
+    """ Threading example class
+    The run() method will be started and it will run in the background
+    until the application exits.
+    """
+
+    def __init__(self, interval=1):
+        """ Constructor
+        :type interval: int
+        :param interval: Check interval, in seconds
+        """
+        self.interval = interval
+
+        thread = threading.Thread(target=self.run, args=())
+        thread.daemon = True                            # Daemonize thread
+        thread.start()                                  # Start the execution
+
+    def run(self):
+        """ Method that runs forever """
+        while True:
+            mylist = os.listdir(logPath)
+            mylist.remove('cmd.txt')
+            mylist= [logPath + s for s in mylist]
+                        
+            with open(progressFile, 'w') as outfile:
+                for fname in sorted(mylist):
+                    with open(fname) as (infile):
+                        outfile.write(infile.read())    
+                     
+            f = open(progressFile)
+            lines = f.readlines()
+            print '\033[1m'+"⣿⣿⣿⣿⣿ TASK SUMMARY ⣿⣿⣿⣿⣿"
+            print '\33[32m'+"FILE NAME: " + hou.hipFile.name() + '\033[0m'
+            print "Log Path:" + logPath
+            print "Running " + '\33[36m'+str(total_tasks) +'\033[0m'+ " Tasks in Batches of " + '\33[36m'+str(max_number_processes) + '\033[0m'
+            print ""
+            
+            bar_length = 100/30
+            
+            for line in lines:
+                member = line.split(',')
+                current= int(member[3])
+                ProgressBar =  '\33[37m'+"Progress:"+"["+((current/bar_length) * "■" + ("-" * (34 - ((current/bar_length)+1))) ) + "]" +member[3]+ "%"
+                print '\33[36m'+"Wedge:"+'\33[32m'+member[0] +"   "+'\33[36m'+" Frame:" +'\33[32m'+member[2]+"   "+'\33[36m'+" Mem Usage:" +'\33[32m' +member[6] ,   
+                print ProgressBar
+            time.sleep(0.1)
+            os.system('clear') # on linux / os x
+
+runProgress = Progress()
 
 #Split Frames for Wedging Non Simulation
 def split_seq(seq, size):
@@ -50,7 +114,7 @@ taskList = split_seq(range(FileRange), total_tasks)
 def simRops(wedge=total_tasks):
     wedger.set(wedge)
     time.sleep(0.1)
-    cache.render(verbose=True,)
+    cache.render(verbose=False,)
 
 #Updates the wedge Value and runs the rop in splitted frame ranges 
 def cacheRops(wedge=total_tasks):
@@ -59,7 +123,7 @@ def cacheRops(wedge=total_tasks):
     hou.parmTuple(lines[7])[0].set(startFrame)
     hou.parmTuple(lines[7])[1].set(endFrame)
     time.sleep(0.1)
-    cache.render(verbose=True,)
+    cache.render(verbose=False,)
 
 #Makes a Flipbooks from Sequence
 def dailyHoudini(wedge=total_tasks):
@@ -71,7 +135,7 @@ def dailyHoudini(wedge=total_tasks):
     time.sleep(0.1)
     flipbook.render(verbose=True,)
     sframe = int(hou.evalParmTuple(lines[9])[0])
-    mp4 = "ffmpeg -start_number 0" + str(sframe) + " -framerate 25 -i " + daily + "%04d.jpg -c:v libx264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p " + videos + str(wedge) + ".mp4"
+    mp4 = "ffmpeg -y -start_number 0" + str(sframe) + " -framerate 25 -i " + daily + "%*.jpg -c:v libx264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p " + videos + str(wedge) + ".mp4"
     p = subprocess.call(mp4,shell=True)
 
 #Prints memory Usage
@@ -98,5 +162,5 @@ if __name__ == '__main__':
     
     pool.close() # After all threads started we close the pool
     pool.join() # And wait until all threads are done
-    
-print("Parent: this Process ran %s seconds" % str(timeit.default_timer() - start_time))
+print ""    
+print("This Wedge Process ran %s seconds" % str(int(timeit.default_timer() - start_time)))
