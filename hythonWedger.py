@@ -6,7 +6,7 @@
 # Importing all needed modules
 import multiprocessing
 from multiprocessing.pool import ThreadPool
-import time, timeit, os , subprocess, resource, threading, sys
+import time, timeit, os , subprocess, resource, threading, sys, psutil
 from multiprocessing import Process
 
 #Clear Screen
@@ -41,7 +41,14 @@ isSim = int(lines[3]) # simulate or cache flag
 makeDaily = int(lines[4]) # make daily from a camera
 logPath = lines[14]
 progressFile = logPath + "progress.out"
-
+asciiart = '''
+██╗  ██╗ ██╗███████╗    ██╗    ██╗███████╗██████╗  ██████╗ ███████╗██████╗ 
+██║  ██║███║╚════██║    ██║    ██║██╔════╝██╔══██╗██╔════╝ ██╔════╝██╔══██╗
+███████║╚██║    ██╔╝    ██║ █╗ ██║█████╗  ██║  ██║██║  ███╗█████╗  ██████╔╝
+██╔══██║ ██║   ██╔╝     ██║███╗██║██╔══╝  ██║  ██║██║   ██║██╔══╝  ██╔══██╗
+██║  ██║ ██║   ██║      ╚███╔███╔╝███████╗██████╔╝╚██████╔╝███████╗██║  ██║
+╚═╝  ╚═╝ ╚═╝   ╚═╝       ╚══╝╚══╝ ╚══════╝╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝
+'''
 logs = os.listdir(logPath)
 for log in logs:
     if log.endswith(".log"):
@@ -81,24 +88,60 @@ class Progress(object):
                      
             f = open(progressFile)
             lines = f.readlines()
-            print '\033[1m'+"⣿⣿⣿⣿⣿ TASK SUMMARY ⣿⣿⣿⣿⣿"
-            print '\33[32m'+"FILE NAME: " + hou.hipFile.name() + '\033[0m'
-            print "Log Path:" + logPath
-            print "Running " + '\33[36m'+str(total_tasks) +'\033[0m'+ " Tasks in Batches of " + '\33[36m'+str(max_number_processes) + '\033[0m'
+            
+            print asciiart
+            e = "░"
+            print '\033[1m'+"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿ Process Summary ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿"+'\33[0m'
             print ""
+            print '\33[32m'+"File Name: " + hou.hipFile.name() + '\033[0m'
+            print '\33[32m'+"Log Path:" + logPath + '\033[0m'
+            print "Running " + '\33[36m'+str(total_tasks) +'\033[0m'+ " Tasks in Batches of " + '\33[36m'+str(max_number_processes) + '\033[0m'
+            print e*75
             
-            bar_length = 100/30
+            bar_length = 100/50
+            usageLegend = ['\033[95m','\033[94m','\033[93m','\033[91m']
+            percentages = [10,20,50,90,100]
+            cpuUsage = psutil.cpu_percent()
+            memUsage = psutil.virtual_memory()[2]
+            usage = usageLegend[0]
+            usageCPU = usageLegend[0]
+
+            if memUsage > 20:
+                usage = usageLegend[1]
+            if memUsage > 50:
+                usage = usageLegend[2]
+            if memUsage > 90:
+                usage = usageLegend[3]
+
+            if cpuUsage > 20:
+                usageCPU = usageLegend[1]
+            if cpuUsage > 50:
+                usageCPU = usageLegend[2]
+            if cpuUsage > 90:
+                usageCPU = usageLegend[3]
+
             
+            print "CPU Utilization: " + usageCPU + str(cpuUsage) + "%" + '\33[0m'  + "  Memory Utilization: " + usage + str(memUsage)+ "%" + '\33[0m'                 
+            print "" 
+            timer = str(int(timeit.default_timer() - start_time))            
             for line in lines:
                 member = line.split(',')
                 current= int(member[3])
-                ProgressBar =  '\33[37m'+"Progress:"+"["+((current/bar_length) * "■" + ("-" * (34 - ((current/bar_length)+1))) ) + "]" +member[3]+ "%"
-                print '\33[36m'+"Wedge:"+'\33[32m'+member[0] +"   "+'\33[36m'+" Frame:" +'\33[32m'+member[2]+"   "+'\33[36m'+" Mem Usage:" +'\33[32m' +member[6] ,   
+                ProgressBar =  '\33[37m'+"Progress:"+"["+((current/bar_length) * "■" + ("□" * (51 - ((current/bar_length)+1))) ) + "]" +member[3]+ "'%'"  
+                
+                print '\33[36m'+"Wedge:"+'\33[32m'+member[0] +"   "+'\33[36m'+" Frame:" +'\33[32m'+member[2]+"   "+'\33[36m'+" Mem Usage:" +'\33[32m' + member[6] ,   
+                print "Elapsed Time: " + timer + " Loop Time: " + str(time.time()/1000)
                 print ProgressBar
-            time.sleep(0.1)
+                
+            
+            #print  "Total RAM USAGE: " str(psutil.virtual_memory()) + "%"
+            time.sleep(0.3)
             os.system('clear') # on linux / os x
+            
+            
 
-runProgress = Progress()
+if(isSim == 1):
+    runProgress = Progress() 
 
 #Split Frames for Wedging Non Simulation
 def split_seq(seq, size):
@@ -133,9 +176,9 @@ def dailyHoudini(wedge=total_tasks):
     if not os.path.exists(videos):
         os.makedirs(videos)
     time.sleep(0.1)
-    flipbook.render(verbose=True,)
+    flipbook.render(verbose=False,)
     sframe = int(hou.evalParmTuple(lines[9])[0])
-    mp4 = "ffmpeg -y -start_number 0" + str(sframe) + " -framerate 25 -i " + daily + "%*.jpg -c:v libx264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p " + videos + str(wedge) + ".mp4"
+    mp4 = "ffmpeg -loglevel panic -y -start_number 0" + str(sframe) + " -framerate 25 -i " + daily + "%*.jpg -c:v libx264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p " + videos + str(wedge) + ".mp4"
     p = subprocess.call(mp4,shell=True)
 
 #Prints memory Usage
@@ -144,6 +187,7 @@ def current_mem_usage():
 
 #Multiprocess Functions Here    
 if __name__ == '__main__':
+    
     
     pool = multiprocessing.Pool(max_number_processes) #Defines the Batch Size
     
